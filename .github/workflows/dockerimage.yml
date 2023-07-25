@@ -19,9 +19,15 @@ jobs:
         key: ${{ runner.os }}-buildx-${{ github.sha }}
         restore-keys: |
           ${{ runner.os }}-buildx-
+    - name: Log in to Docker Hub
+      uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
+      with:
+        username: rikugun
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build the Docker image
       run: |
         DOCKER_PLATFORMS=linux/amd64,linux/arm64
+        #docker login docker.pkg.github.com --username rikugun --password ${{ secrets.DOCKERHUB_TOKEN }}
         docker buildx build --tag starmetal/nginx-rtmp:latest --platform ${DOCKER_PLATFORMS} --push .
         #docker build . --file Dockerfile --tag nginx-rtmp:latest
         #docker tag nginx-rtmp starmetal/nginx-rtmp:latest
