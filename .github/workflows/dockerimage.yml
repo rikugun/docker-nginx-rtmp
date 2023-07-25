@@ -7,7 +7,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Buildx
@@ -22,7 +21,6 @@ jobs:
           ${{ runner.os }}-buildx-
     - name: Build the Docker image
       run: |
-        docker login docker.pkg.github.com --username rikugun --password ${{ secrets.DOCKERHUB_TOKEN }}
         DOCKER_PLATFORMS=linux/amd64,linux/arm64
         docker buildx build --tag starmetal/nginx-rtmp:latest --platform ${DOCKER_PLATFORMS} --push .
         #docker build . --file Dockerfile --tag nginx-rtmp:latest
