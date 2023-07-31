@@ -4,7 +4,7 @@ ARG FFMPEG_VERSION=5.1
 
 ##############################
 # Build the NGINX-build image.
-FROM --platform=${BUILDPLATFORM:-linux/amd64} alpine:3.18 as build-nginx
+FROM alpine:3.18 as build-nginx
 ARG NGINX_VERSION
 ARG NGINX_RTMP_VERSION
 ARG MAKEFLAGS="-j4"
@@ -132,11 +132,7 @@ RUN \
 ##########################
 # Build the release image.
 
-ARG TARGETARCH
-RUN echo $TARGETARCH && wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-${TARGETARCH}-static.tar.xz && \
-    tar xvf ffmpeg-release-${TARGETARCH}-static.tar.xz && cp ffmpeg*/ff* /usr/local/bin/
-
-FROM alpine:3.18
+FROM --platform=${BUILDPLATFORM:-linux/amd64} alpine:3.18
 LABEL MAINTAINER starmetal<info@starmetal.com.cn>
 
 # Set default ports.
@@ -144,6 +140,10 @@ ENV HTTP_PORT 80
 ENV HTTPS_PORT 443
 ENV RTMP_PORT 1935
 
+ARG TARGETARCH
+RUN echo $TARGETARCH && wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-${TARGETARCH}-static.tar.xz && \
+    tar xvf ffmpeg-release-${TARGETARCH}-static.tar.xz && cp ffmpeg*/ff* /usr/local/bin/
+    
 RUN apk add --no-cache \
   ca-certificates \
   gettext \
