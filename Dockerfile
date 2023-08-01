@@ -132,8 +132,8 @@ RUN \
 ##########################
 # Build the release image.
 
-FROM --platform=${BUILDPLATFORM:-linux/amd64} alpine:3.18
-LABEL MAINTAINER starmetal<info@starmetal.com.cn>
+FROM alpine:3.18
+LABEL MAINTAINER=starmetal<info@starmetal.com.cn>
 
 # Set default ports.
 ENV HTTP_PORT 80
