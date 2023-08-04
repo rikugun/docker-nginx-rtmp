@@ -4,7 +4,7 @@ ARG FFMPEG_VERSION=6.0
 
 ##############################
 # Build the NGINX-build image.
-FROM  --platform=${BUILDPLATFORM:-linux/amd64} openeuler/openeuler:22.03-lts-sp2 as build-nginx
+FROM  openeuler/openeuler:22.03-lts-sp2 as build-nginx
 ARG NGINX_VERSION
 ARG NGINX_RTMP_VERSION
 ARG MAKEFLAGS="-j4"
@@ -81,7 +81,6 @@ RUN yum install \
   libwebp \
   libtheora \
   opus \
-  rtmpdump \
   x264-devel \
   x265-devel \
     wget
