@@ -26,3 +26,6 @@ jobs:
         # docker login docker.pkg.github.com --username rikugun --password ${{ secrets.GITHUB_TOKEN }}
         # docker tag nginx-rtmp docker.pkg.github.com/starmetal/docker-nginx-rtmp/nginx-rtmp:latest
         # push docker.pkg.github.com/starmetal/docker-openencoder/nginx-rtmp:latest
+        #build openeuler
+        docker buildx build --file Dockerfile.openeuler --tag starmetal/nginx-rtmp:euler-latest --platform ${DOCKER_PLATFORMS} --push .
+
