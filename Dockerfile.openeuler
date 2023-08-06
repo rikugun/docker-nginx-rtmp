@@ -67,7 +67,7 @@ ENV HTTP_PORT 80
 ENV HTTPS_PORT 443
 ENV RTMP_PORT 1935
 
-RUN yum install \
+RUN yum install -y \
   ca-certificates \
   gettext \
   openssl \
@@ -83,7 +83,7 @@ RUN yum install \
   opus \
   x264-devel \
   x265-devel \
-    wget
+  wget
 
 COPY --from=build-nginx /usr/local/nginx /usr/local/nginx
 COPY --from=build-nginx /etc/nginx /etc/nginx
