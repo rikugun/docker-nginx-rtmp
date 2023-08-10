@@ -39,14 +39,13 @@ RUN wget https://github.com/winshining/nginx-http-flv-module/archive/v${NGINX_RT
 #Get GCC for openeuler
 RUN if [ "x$TARGETARCH" = "xarm64" ]; then \
      wget ${GCC_FOR_OPENEULER} -O gcc.tar.gz && mkdir -p gcc && tar zxf gcc.tar.gz -C /tmp/gcc --strip-components 1 ;\
-     export  CC=/tmp/gcc/bin/gcc CXX=/tmp/gcc/bin/g++ ;\
      echo "GCC_FOR_OPENEULER " && /tmp/gcc/bin/gcc -v ;\
     fi
 
 # Compile nginx with nginx-rtmp module.
 WORKDIR /tmp/nginx-${NGINX_VERSION}
-RUN \
-  ./configure \
+RUN if [ "x$TARGETARCH" = "xarm64" ]; then \
+  CC=/tmp/gcc/bin/gcc CXX=/tmp/gcc/bin/g++ ./configure \
   --prefix=/usr/local/nginx \
   --add-module=/tmp/nginx-http-flv-module-${NGINX_RTMP_VERSION} \
   --conf-path=/etc/nginx/nginx.conf \
@@ -55,9 +54,20 @@ RUN \
   --with-http_ssl_module \
   --with-debug \
   --with-http_stub_status_module \
-  --with-cc-opt="-Wimplicit-fallthrough=0" && \
-  make && \
-  make install
+  --with-cc-opt="-Wimplicit-fallthrough=0" ;\
+  else \
+      ./configure \
+        --prefix=/usr/local/nginx \
+        --add-module=/tmp/nginx-http-flv-module-${NGINX_RTMP_VERSION} \
+        --conf-path=/etc/nginx/nginx.conf \
+        --with-threads \
+        --with-file-aio \
+        --with-http_ssl_module \
+        --with-debug \
+        --with-http_stub_status_module \
+        --with-cc-opt="-Wimplicit-fallthrough=0" ;\
+ fi
+RUN  make && make install
 
 
 ARG TARGETARCH
