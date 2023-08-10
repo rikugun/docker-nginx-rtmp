@@ -41,7 +41,7 @@ RUN if [ "xTARGETARCH" = "xarm64" ]; then \
      wget ${GCC_FOR_OPENEULER} && mkdir -p gcc && tar zxf gcc* -C /tmp/gcc --strip-components 1 ;\
      export  CC=/tmp/gcc/bin/gcc CXX=/tmp/gcc/bin/g++ ;\
      echo "GCC_FOR_OPENEULER " && /tmp/gcc/bin/gcc -v ;\
-    fi \
+    fi
 
 # Compile nginx with nginx-rtmp module.
 WORKDIR /tmp/nginx-${NGINX_VERSION}
