@@ -1,6 +1,7 @@
 ARG NGINX_VERSION=1.24.0
 ARG NGINX_RTMP_VERSION=1.2.11
 ARG FFMPEG_VERSION=6.0
+ARG GCC_FOR_OPENEULER=https://mirrors.huaweicloud.com/kunpeng/archive/compiler/kunpeng_gcc/gcc-10.3.1-2023.06-aarch64-linux.tar.gz
 
 ##############################
 # Build the NGINX-build image.
@@ -34,6 +35,14 @@ RUN wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
 RUN wget https://github.com/winshining/nginx-http-flv-module/archive/v${NGINX_RTMP_VERSION}.tar.gz && \
   tar zxf v${NGINX_RTMP_VERSION}.tar.gz && \
   rm v${NGINX_RTMP_VERSION}.tar.gz
+
+#Get GCC for openeuler
+RUN if [ "xTARGETARCH" = "xarm64" ]; then \
+     export CC=/tmp/gcc/bin/gcc CXX=/tmp/gcc/bin/g++ ;\
+     wget ${GCC_FOR_OPENEULER} && mkdir -p gcc && tar zxf gcc* -C /tmp/gcc --strip-components 1 ;\
+     export  CC=/tmp/gcc/bin/gcc CXX=/tmp/gcc/bin/g++ ;\
+     echo "GCC_FOR_OPENEULER " && /tmp/gcc/bin/gcc -v ;\
+    fi \
 
 # Compile nginx with nginx-rtmp module.
 WORKDIR /tmp/nginx-${NGINX_VERSION}
