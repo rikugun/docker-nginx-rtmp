@@ -9,7 +9,7 @@ ARG NGINX_VERSION
 ARG NGINX_RTMP_VERSION
 ARG MAKEFLAGS="-j4"
 ARG GCC_FOR_OPENEULER=https://mirrors.huaweicloud.com/kunpeng/archive/compiler/kunpeng_gcc/gcc-10.3.1-2023.06-aarch64-linux.tar.gz
-
+ARG TARGETARCH
 # Build dependencies.
 RUN  yum -y groupinstall "Development Tools" && yum install -y \
   ca-certificates \
